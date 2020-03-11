@@ -71,7 +71,7 @@ public class OptimizeService {
         }
         if (noOfRooms > 100) {
             throw new InValidSelectionException("Please select rooms less than 100 as you have selected InValid selection of " + noOfRooms);
-        } else if (noOfRooms < 0) {
+        } else if (noOfRooms < 1) {
             throw new InValidSelectionException("Please select valid number of Rooms");
         }
         System.out.println("Seniors: " + seniors + ", Juniors: " + juniors);
