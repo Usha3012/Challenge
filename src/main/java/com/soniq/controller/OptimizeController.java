@@ -21,7 +21,7 @@ public class OptimizeController {
 
     private final OptimizeService optimizeService;
 
-    @RequestMapping(path = "/api/optimize/cleaners", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(path = "/workforce/cleaners/optimize", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ResponseDTO>> optimizer(@RequestBody @Valid RequestDTO optimizeRequest) {
         List<ResponseDTO> optimizedResult = optimizeService.optimize(optimizeRequest);
         return new ResponseEntity<>(optimizedResult, HttpStatus.CREATED);

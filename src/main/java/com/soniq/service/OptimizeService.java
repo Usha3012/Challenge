@@ -2,7 +2,7 @@ package com.soniq.service;
 
 import com.soniq.domain.RequestDTO;
 import com.soniq.domain.ResponseDTO;
-import com.soniq.exception.NotFoundException;
+import com.soniq.exception.InValidSelectionException;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +12,26 @@ import java.util.List;
 @Service
 public class OptimizeService {
 
+    private static int getCurrentResidueToClean(int numOfRooms, int workerCapacity) {
+        return Math.abs(numOfRooms - workerCapacity);
+    }
+
+    private static int getResidueOverCapacity(int numOfRooms, int workCapacity) {
+        int overCapacity = 0;
+        while (numOfRooms > 0) {
+            numOfRooms = numOfRooms - workCapacity;
+            overCapacity = numOfRooms;
+        }
+        return overCapacity;
+    }
+
     public List<ResponseDTO> optimize(RequestDTO optimizeDTO) {
         List<ResponseDTO> optimizationResult = new ArrayList<>();
         for ( Integer noOfRooms : optimizeDTO.getRooms() ) {
             optimizationResult.add(optimize(noOfRooms, optimizeDTO.getSenior(), optimizeDTO.getJunior()));
+        }
+        if (optimizationResult.isEmpty()) {
+            throw new InValidSelectionException("Please select valid number of Rooms");
         }
         return optimizationResult;
     }
@@ -53,22 +69,12 @@ public class OptimizeService {
             remainingRooms = remainingRooms - juniorCapacity;
             juniors++;
         }
+        if (noOfRooms > 100) {
+            throw new InValidSelectionException("Please select rooms less than 100 as you have selected InValid selection of " + noOfRooms);
+        } else if (noOfRooms < 0) {
+            throw new InValidSelectionException("Please select valid number of Rooms");
+        }
         System.out.println("Seniors: " + seniors + ", Juniors: " + juniors);
         return new ResponseDTO(seniors, juniors);
-    }
-
-
-    private static int getCurrentResidueToClean(int numOfRooms, int workerCapacity) {
-        return Math.abs(numOfRooms - workerCapacity);
-    }
-
-
-    private static int getResidueOverCapacity(int numOfRooms, int workCapacity) {
-        int overCapacity = 0;
-        while (numOfRooms > 0) {
-            numOfRooms = numOfRooms - workCapacity;
-            overCapacity = numOfRooms;
-        }
-        return overCapacity;
     }
 }
